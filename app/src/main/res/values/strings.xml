@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">VoteApp</string>
+    <string name="tag_progress_view">tag_progress_view</string>
+    <string name="tag_name_view">tag_name_view</string>
+    <string name="tag_number_view">tag_number_view</string>
+</resources>
