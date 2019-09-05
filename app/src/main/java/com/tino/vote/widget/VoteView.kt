@@ -34,62 +34,52 @@ class VoteView(context: Context?, attrs: AttributeSet?) : FrameLayout(context, a
         totalNumberView.text = "${totalNumber}人参与"
         this.options = options
         var current = 0
-        for (i in options.indices) {
-            if (options[i].chose) current = i
-            val optionView: View = inflate(context, R.layout.vote_option_layout, null)
-            var progressView: View = optionView.findViewById(R.id.progress_view)
-            val nameView: TextView = optionView.findViewById(R.id.name_text_view)
-            val numberView: TextView = optionView.findViewById(R.id.number_text_view)
-            if (chose) {
-                numberView.alpha = 1f
-                if (options[i].chose) nameView.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(context, R.mipmap.chose_icon), null)
-            } else {
-                numberView.alpha = 0f
-            }
-            nameView.text = options[i].name
-            numberView.text = "${options[i].number}人"
-            optionView.setTag(R.string.tag_progress_view, progressView)
-            optionView.setTag(R.string.tag_name_view, nameView)
-            optionView.setTag(R.string.tag_number_view, numberView)
-            optionView.setOnClickListener {
-                if (!mChose) {
-                    mChose = true
-                    nameView.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(context, R.mipmap.chose_icon), null)
-                    vote(i, totalNumber)
-                } else {
-                    Toast.makeText(context, "您已投过票", Toast.LENGTH_SHORT).show()
+        for (index in options.indices) {
+            if (options[index].chose) current = index
+            (inflate(context, R.layout.vote_option_layout, optionsLayout) as? LinearLayout)?.getChildAt(index)?.let {
+                var progressView: View = it.findViewById(R.id.progress_view)
+                val nameView: TextView = it.findViewById(R.id.name_text_view)
+                val numberView: TextView = it.findViewById(R.id.number_text_view)
+                nameView.text = options[index].name
+                if (chose && options[index].chose) nameView.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(context, R.mipmap.chose_icon), null)
+                numberView.alpha = if (chose) 1f else 0f
+                numberView.text = "${options[index].number}人"
+                it.setTag(R.string.tag_progress_view, progressView)
+                it.setTag(R.string.tag_name_view, nameView)
+                it.setTag(R.string.tag_number_view, numberView)
+                it.setOnClickListener {
+                    if (!mChose) {
+                        mChose = true
+                        nameView.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(context, R.mipmap.chose_icon), null)
+                        vote(index, totalNumber)
+                    } else {
+                        Toast.makeText(context, "您已投过票", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
-            optionsLayout.addView(optionView)
         }
         if (chose) vote(current, totalNumber)
     }
 
     private fun vote(current: Int, totalNumber: Int) {
         optionsLayout.post {
-            for (i in 0 until optionsLayout.childCount) {
-                val optionView = optionsLayout.getChildAt(i)
-                var progressView: View = optionView.getTag(R.string.tag_progress_view) as View
-                val nameView: TextView = optionView.getTag(R.string.tag_name_view) as TextView
-                val numberView: TextView = optionView.getTag(R.string.tag_number_view) as TextView
-                numberView.visibility = View.VISIBLE
-                if (current == i) {
-                    progressView.isSelected = true
-                    nameView.setTextColor(Color.parseColor("#2B8DE2"))
-                    numberView.setTextColor(Color.parseColor("#2B8DE2"))
-                } else {
-                    progressView.isSelected = false
-                    nameView.setTextColor(Color.parseColor("#999999"))
-                    numberView.setTextColor(Color.parseColor("#999999"))
+            for (index in 0 until optionsLayout.childCount) {
+                optionsLayout.getChildAt(index)?.let {
+                    var progressView: View = it.getTag(R.string.tag_progress_view) as View
+                    val nameView: TextView = it.getTag(R.string.tag_name_view) as TextView
+                    val numberView: TextView = it.getTag(R.string.tag_number_view) as TextView
+                    progressView.isSelected = current == index
+                    progressView.background = if (it.width - (options[index].number.toFloat() / totalNumber.toFloat()) * it.width > UIUtil.dip2px(context, 5f)) {
+                        ContextCompat.getDrawable(context, R.drawable.progress_view_bg)
+                    } else {
+                        ContextCompat.getDrawable(context, R.drawable.progress_view_bg2)
+                    }
+                    nameView.setTextColor(if (current == index) Color.parseColor("#2B8DE2") else Color.parseColor("#999999"))
+                    numberView.setTextColor(nameView.currentTextColor)
+                    ObjectAnimator.ofInt(ViewWrapper(progressView), "customWidth", ((options[index].number.toFloat() / totalNumber.toFloat()) * it.width).toInt()).setDuration(1000).start()
+                    ObjectAnimator.ofFloat(nameView, "translationX", (nameView.width - it.width + UIUtil.dip2px(context, 20f)) / 2f).setDuration(1000).start()
+                    ObjectAnimator.ofFloat(numberView, "alpha", 1f).setDuration(1000).start()
                 }
-                if (optionView.width - (options[i].number.toFloat() / totalNumber.toFloat()) * optionView.width > UIUtil.dip2px(context, 5f)) {
-                    progressView.background = ContextCompat.getDrawable(context, R.drawable.progress_view_bg)
-                } else {
-                    progressView.background = ContextCompat.getDrawable(context, R.drawable.progress_view_bg2)
-                }
-                ObjectAnimator.ofInt(ViewWrapper(progressView), "customWidth", ((options[i].number.toFloat() / totalNumber.toFloat()) * optionView.width).toInt()).setDuration(1000).start()
-                ObjectAnimator.ofFloat(nameView, "translationX", -(optionView.width - UIUtil.dip2px(context, 20f) - nameView.width) / 2f).setDuration(1000).start()
-                ObjectAnimator.ofFloat(numberView, "alpha", 1f).setDuration(1000).start()
             }
         }
     }

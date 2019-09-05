@@ -1,41 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="38dp"
+    android:layout_marginTop="10dp"
+    android:background="@drawable/option_bg">
 
-    <FrameLayout
-        android:id="@+id/option_view"
-        android:layout_width="match_parent"
-        android:layout_height="38dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/option_bg">
+    <View
+        android:id="@+id/progress_view"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/progress_view_bg" />
 
-        <View
-            android:id="@+id/progress_view"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:background="@drawable/progress_view_bg" />
+    <TextView
+        android:id="@+id/name_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:drawablePadding="5dp"
+        android:ellipsize="end"
+        android:maxEms="15"
+        android:maxLines="1"
+        android:textColor="#2B8DE2"
+        android:textSize="15sp" />
 
-        <TextView
-            android:id="@+id/name_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:drawablePadding="5dp"
-            android:ellipsize="end"
-            android:maxEms="15"
-            android:maxLines="1"
-            android:textColor="#2B8DE2"
-            android:textSize="15sp" />
+    <TextView
+        android:id="@+id/number_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|center_vertical"
+        android:layout_marginRight="10dp" />
 
-        <TextView
-            android:id="@+id/number_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right|center_vertical"
-            android:layout_marginRight="10dp" />
-
-    </FrameLayout>
-
-</LinearLayout>
+</FrameLayout>
