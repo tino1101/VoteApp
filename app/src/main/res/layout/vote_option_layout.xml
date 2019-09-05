@@ -18,7 +18,6 @@
         android:layout_gravity="center"
         android:drawablePadding="5dp"
         android:ellipsize="end"
-        android:maxEms="15"
         android:maxLines="1"
         android:textColor="#2B8DE2"
         android:textSize="15sp" />

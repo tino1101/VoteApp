@@ -77,7 +77,10 @@ class VoteView(context: Context?, attrs: AttributeSet?) : FrameLayout(context, a
                     nameView.setTextColor(if (current == index) Color.parseColor("#2B8DE2") else Color.parseColor("#999999"))
                     numberView.setTextColor(nameView.currentTextColor)
                     ObjectAnimator.ofInt(ViewWrapper(progressView), "customWidth", ((options[index].number.toFloat() / totalNumber.toFloat()) * it.width).toInt()).setDuration(1000).start()
-                    ObjectAnimator.ofFloat(nameView, "translationX", (nameView.width - it.width + UIUtil.dip2px(context, 20f)) / 2f).setDuration(1000).start()
+                    if (nameView.width > it.width - numberView.width - UIUtil.dip2px(context, 30f)) {
+                        ObjectAnimator.ofInt(ViewWrapper(nameView), "customWidth", nameView.width, it.width - numberView.width - UIUtil.dip2px(context, 30f)).setDuration(1000).start()
+                    }
+                    ObjectAnimator.ofFloat(nameView, "X",  UIUtil.dip2px(context, 10f).toFloat()).setDuration(1000).start()
                     ObjectAnimator.ofFloat(numberView, "alpha", 1f).setDuration(1000).start()
                 }
             }
