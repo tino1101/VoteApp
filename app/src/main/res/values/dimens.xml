@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="number_view_right_margin">10dp</dimen>
+    <dimen name="name_view_left_margin">10dp</dimen>
+    <dimen name="name_view_number_view_margin">10dp</dimen>
+
+</resources>
